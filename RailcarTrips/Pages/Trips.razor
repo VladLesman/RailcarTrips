@@ -1,0 +1,75 @@
+﻿@page "/"
+@inject TripApiClient ApiClient
+@inject IDialogService DialogService
+@using MudBlazor
+@using MudBlazor
+@using RailcarTrips.Components
+@using RailcarTrips.Services
+@using RailcarTrips.Shared.Dtos
+@using System.Threading.Tasks
+
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h5">Railcar Trips</MudText>
+
+    @if (isLoading)
+    {
+        <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-2" />
+        <MudText Typo="Typo.subtitle2">Loading trips...</MudText>
+    }
+    else
+    {
+        <MudTable T="TripDto" Items="trips" Hover="true" Striped="true" OnRowClick="OnRowClick" Bordered="true" Dense="true">
+            <HeaderContent>
+                <MudTh>ID</MudTh>
+                <MudTh>Equipment ID</MudTh>
+                <MudTh>Origin</MudTh>
+                <MudTh>Destination</MudTh>
+                <MudTh>Start UTC</MudTh>
+                <MudTh>End UTC</MudTh>
+                <MudTh>Total Hours</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Id</MudTd>
+                <MudTd>@context.EquipmentId</MudTd>
+                <MudTd>@context.OriginCityName</MudTd>
+                <MudTd>@context.DestinationCityName</MudTd>
+                <MudTd>@context.StartUtc</MudTd>
+                <MudTd>@context.EndUtc</MudTd>
+                <MudTd>@TimeSpan.FromHours(@context.TotalHours).ToString(@"d\.hh\:mm")</MudTd>
+            </RowTemplate>
+        </MudTable>
+    }
+</MudPaper>
+
+    @code {
+    private List<TripDto> trips = new();
+    private bool isLoading = true;
+
+    private int selectedTripId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            trips = await ApiClient.GetTripsAsync();
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task OnRowClick(TableRowClickEventArgs<TripDto> args)
+    {
+        if (args.Item != null)
+        {
+            var parameters = new DialogParameters
+            {
+                { "Id", args.Item.Id }
+            };
+
+            var options = new DialogOptions { CloseOnEscapeKey = true }; 
+            var dialog = await DialogService.ShowAsync<TripDetail>("Trip Details", parameters, options);
+        }
+    }
+}

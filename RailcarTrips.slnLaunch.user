@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "RailcarTrips.Api\\RailcarTrips.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "RailcarTrips\\RailcarTrips.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

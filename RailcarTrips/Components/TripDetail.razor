@@ -1,0 +1,57 @@
+﻿@inject TripApiClient ApiClient
+@using MudBlazor
+@using RailcarTrips.Services
+@using RailcarTrips.Shared.Dtos
+
+<MudDialog>
+    <TitleContent>
+        Trip detail
+    </TitleContent>
+    <DialogContent>
+        @if (Trip == null)
+        {
+            <MudProgressLinear Indeterminate="true" />
+            <MudText>Loading...</MudText>
+        }
+        else
+        {
+            <MudText Typo="Typo.h6">Events for @Trip.EquipmentId</MudText>
+
+            <MudTable Items="Trip.Events">
+                <HeaderContent>
+                    <MudTh>Event Code</MudTh>
+                    <MudTh>City</MudTh>
+                    <MudTh>Local Time</MudTh>
+                    <MudTh>UTC Time</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>@context.EventCode</MudTd>
+                    <MudTd>@context.CityName</MudTd>
+                    <MudTd>@context.LocalTime</MudTd>
+                    <MudTd>@context.UtcTime</MudTd>
+                </RowTemplate>
+            </MudTable>
+
+            
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Close">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public int Id { get; set; }
+
+    private TripDto? Trip;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Trip = await ApiClient.GetTripDetailAsync(Id);
+    }
+
+    private void Close() => MudDialog.Cancel();
+}

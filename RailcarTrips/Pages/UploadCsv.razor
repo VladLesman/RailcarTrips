@@ -1,0 +1,58 @@
+﻿@page "/upload"
+@inject TripApiClient ApiClient
+@using Microsoft.AspNetCore.Components.Forms
+@using MudBlazor
+@using RailcarTrips.Services
+
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h5">Upload Equipment Events CSV</MudText>
+
+    <InputFile OnChange="OnFileSelected" Disabled="@isUploading" />
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!fileSelected || isUploading)" OnClick="UploadFile">
+        Upload
+    </MudButton>
+
+    @if (isUploading)
+    {
+        <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="mt-2" />
+        <MudText Typo="Typo.subtitle2">Uploading CSV, please wait...</MudText>
+    }
+
+    @if (!string.IsNullOrEmpty(uploadResult))
+    {
+        <MudText Typo="Typo.subtitle2">@uploadResult</MudText>
+    }
+</MudPaper>
+
+@code {
+    private IBrowserFile? selectedFile;
+    private bool fileSelected => selectedFile != null;
+    private bool isUploading = false;
+    private string uploadResult = "";
+
+    private void OnFileSelected(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
+        uploadResult = "";
+    }
+
+    private async Task UploadFile()
+    {
+        if (selectedFile == null) return;
+        isUploading = true;
+        try
+        {
+            await ApiClient.UploadCsvAsync(selectedFile);
+            uploadResult = "Upload successful!";
+        }
+        catch
+        {
+            uploadResult = "Upload failed!";
+        }
+        finally
+        {
+            isUploading = false;
+            selectedFile = null;
+        }
+    }
+}

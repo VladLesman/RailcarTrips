@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/Solution Items/" />
+  <Folder Name="/Tests/">
+    <Project Path="Tests/RailcarTrips.Core.Tests/RailcarTrips.Core.Tests.csproj" />
+  </Folder>
+  <Project Path="RailcarTrips.Api/RailcarTrips.Api.csproj" />
+  <Project Path="RailcarTrips.Application/RailcarTrips.Application.csproj" />
+  <Project Path="RailcarTrips.Core/RailcarTrips.Core.csproj" />
+  <Project Path="RailcarTrips.Infrastructure/RailcarTrips.Infrastructure.csproj" />
+  <Project Path="RailcarTrips.Shared.Dtos/RailcarTrips.Shared.Dtos.csproj" />
+  <Project Path="RailcarTrips/RailcarTrips.csproj" />
+</Solution>
