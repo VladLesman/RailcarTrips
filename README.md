@@ -1,8 +1,14 @@
 Railcar Trips – Assessment Submission
-This solution implements a Blazor WebAssembly application backed by an ASP.NET Core API and an EF Core In‑Memory database. The goal is to ingest equipment event data from CSV files, convert those events into railcar trips, and present the results in a clean UI. The implementation focuses on clarity, separation of concerns, and demonstrating architectural thinking rather than delivering a fully production‑ready system.
+This solution implements a Blazor WebAssembly application backed by an ASP.NET Core API and an EF Core In‑Memory database.
+The goal is to ingest equipment event data from CSV files, convert those events into railcar trips, and present the results in a clean UI.
+The implementation focuses on clarity, separation of concerns, and demonstrating architectural thinking rather than delivering a fully production‑ready system.
+
 Solution Architecture
+
 The solution follows a layered architecture with clear boundaries between UI, API, application logic, domain logic, and infrastructure.
+
 Layer Overview
+
 RailcarTrips (Blazor WebAssembly UI)
 Provides the user interface for:
     • Uploading cities CSV
@@ -10,11 +16,13 @@ Provides the user interface for:
     • Viewing processed trips
     • Viewing trip event details
 Uses MudBlazor for layout and styling. Communicates with the API via typed HttpClient services.
+
 RailcarTrips.Api (Web API)
 Exposes endpoints for:
     • Uploading CSV files
     • Querying processed trips
 Delegates all business logic to the Application layer.
+
 RailcarTrips.Application (Use Case Layer)
 Implements application workflows:
     • Importing cities
@@ -22,12 +30,14 @@ Implements application workflows:
     • Processing trips
     • Querying trips
 Contains no domain logic; orchestrates domain and infrastructure operations.
+
 RailcarTrips.Core (Domain Layer)
 Contains pure business logic:
     • TripProcessor (W → Z trip construction)
     • Domain entities
     • Domain contracts
 No dependencies on infrastructure or UI.
+
 RailcarTrips.Infrastructure (Infrastructure Layer)
 Implements:
     • EF Core InMemory database
@@ -35,10 +45,13 @@ Implements:
     • CSV parsing (CsvHelper)
     • Time zone conversion utilities
 Bridges domain and application layers.
+
 RailcarTrips.Shared.Dtos
 Defines DTOs shared between client and server.
+
 Tests
 Unit tests for domain logic (TripProcessor).
+
 Trip Processing Logic
 Trips are constructed per equipment using the following rules:
     • W (Released) → start a new trip
@@ -47,8 +60,6 @@ Trips are constructed per equipment using the following rules:
     • Trips are sorted by UTC time
     • Total trip duration = (EndUtc - StartUtc).TotalHours
 Event timestamps are converted from local time to UTC using the city’s time zone.
-
-
 
 Assumptions
     1. City time zones in the CSV are valid Windows time zone IDs.
