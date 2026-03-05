@@ -1,6 +1,9 @@
 Railcar Trips – Assessment Submission
+
 This solution implements a Blazor WebAssembly application backed by an ASP.NET Core API and an EF Core In‑Memory database.
+
 The goal is to ingest equipment event data from CSV files, convert those events into railcar trips, and present the results in a clean UI.
+
 The implementation focuses on clarity, separation of concerns, and demonstrating architectural thinking rather than delivering a fully production‑ready system.
 
 Solution Architecture
@@ -68,12 +71,14 @@ Assumptions
     4. Incomplete trips (W without Z) are ignored for now.
     5. Duplicate uploads are not deduplicated (TODO).
     6. InMemory database is acceptable for assessment purposes.
+    
 Questions for Clarification
     1. Should incomplete trips be stored or discarded?
     2. Should multiple consecutive W events close the previous trip?
     3. Should the UI show local times, UTC times, or both?
     4. Should re-uploading CSVs clear existing data?
     5. Should trip processing be idempotent?
+    
 TODO / Future Improvements
     • Add validation for malformed CSV rows.
     • Add logging for inconsistent event sequences.
@@ -82,6 +87,7 @@ TODO / Future Improvements
     • Add more unit tests for edge cases.
     • Add error details to the UI instead of generic messages.
     • Add authentication if required.
+    
 Running the Solution
     1. Open the solution in Visual Studio or Rider.
     2. Set RailcarTrips.Api as the startup project.
